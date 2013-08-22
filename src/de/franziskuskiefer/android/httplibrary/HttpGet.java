@@ -1,10 +1,7 @@
 package de.franziskuskiefer.android.httplibrary;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -56,7 +53,7 @@ public class HttpGet extends AsyncTask<String, Void, String> {
 			is = conn.getInputStream();
 
 			// Convert the InputStream into a string
-			String contentAsString = stream2string(is);
+			String contentAsString = Util.stream2string(is);
 			return contentAsString;
 
 			// Makes sure that the InputStream is closed after the app is
@@ -68,16 +65,4 @@ public class HttpGet extends AsyncTask<String, Void, String> {
 		}
 	}
 	
-	// Reads an InputStream and converts it to a String.
-	private String stream2string(InputStream stream) throws IOException, UnsupportedEncodingException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));    
-		
-		String line, result = "";
-        while((line = reader.readLine()) != null){
-            result += line;
-        }
-        
-		return result;
-	}
-
 }
