@@ -1,6 +1,14 @@
 package de.franziskuskiefer.android.httplibrary;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,16 +16,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
-public class HttpPost extends AsyncTask<String, Void, String> {
+public class HttpPost extends AsyncTask<String, Void, HashMap<String, String>> {
 
 	private Callback caller;
 	private HashMap<String, String> parameters;
@@ -28,51 +34,65 @@ public class HttpPost extends AsyncTask<String, Void, String> {
 	}
 
 	@Override
-	protected String doInBackground(String... urls) {
-
-		// params comes from the execute() call: params[0] is the url.
+	protected HashMap<String, String> doInBackground(String... urls) {
+		// urls come from the execute() call
 		try {
 			return postRequest(urls[0]);
 		} catch (IOException e) {
-			return "Unable to retrieve web page. URL may be invalid.";
+			HashMap<String, String> result = new HashMap<String, String>();
+			result.put("Exception", "Unable to retrieve web page. URL may be invalid.");
+			return result;
 		}
 	}
 
-	// onPostExecute displays the results of the AsyncTask.
+	// onPostExecute invoke caller's finished
 	@Override
-	protected void onPostExecute(String result) {
+	protected void onPostExecute(HashMap<String, String> result) {
 		this.caller.finished(result);
 	}
 
-	// Given a URL, establishes an HttpUrlConnection and retrieves
-	// the web page content as a InputStream, which it returns as
-	// a string.
-	private String postRequest(String url) throws IOException {
-		HttpClient client = new DefaultHttpClient();
-		org.apache.http.client.methods.HttpPost post = new org.apache.http.client.methods.HttpPost(url);
+	private HashMap<String, String> postRequest(String url) throws IOException {
+		
+		try {
+			HashMap<String, String> result = new HashMap<String, String>();
+			
+			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+			conn.setReadTimeout(10000);
+			conn.setConnectTimeout(15000);
+			conn.setRequestMethod("POST");
+			conn.setDoInput(true);
+			conn.setDoOutput(true);
 
-	    try {
-	      List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-	      
-	      // add parameter list
-	      Iterator<Entry<String, String>> it = this.parameters.entrySet().iterator();
-	      while (it.hasNext()) {
-	    	  Map.Entry<String, String> val = it.next();
-	    	  postParameters.add(new BasicNameValuePair(val.getKey(), val.getValue()));
-	      }
-	      
-	      post.setEntity(new UrlEncodedFormEntity(postParameters));
-	      HttpResponse response = client.execute(post);
-	      String result = Util.stream2string(response.getEntity().getContent());
-	      
-	      System.out.println("Post Result: "+result);
-	      
-	      return result;
-	    } catch (IOException e) {
-	      e.printStackTrace();
-	    }
-	    
+			// add parameter list
+			List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+			Iterator<Entry<String, String>> it = this.parameters.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<String, String> val = it.next();
+				postParameters.add(new BasicNameValuePair(val.getKey(), val.getValue()));
+			}
+
+			OutputStream os = conn.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			String encodedParams = Util.stream2string(new UrlEncodedFormEntity(postParameters).getContent());
+			writer.write(encodedParams);
+			writer.close();
+			os.close();
+			
+			int response = conn.getResponseCode();
+			Log.d("CONNECTOR_DEBUG", "The response is: " + response);
+			InputStream is = conn.getInputStream();
+
+			// Convert the InputStream into a string
+			String website = Util.stream2string(is);
+			System.out.println("Post Result: "+website);
+			result.put("Result", website);
+
+			return result;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return null;
 	}
-
+	
 }

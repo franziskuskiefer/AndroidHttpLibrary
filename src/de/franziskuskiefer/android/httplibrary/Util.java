@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 
 public class Util {
 
@@ -17,6 +21,28 @@ public class Util {
 			result += line;
 		}
 
+		return result;
+	}
+	
+	public static String getFingerprint(Certificate cert) {
+		String result = "";
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
+			return byteArrayToHexString(md.digest(cert.getEncoded()));
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (CertificateEncodingException e) {
+			e.printStackTrace();
+		}
+		return result;
+
+	}
+	
+	public static String byteArrayToHexString(byte[] in){
+		String result = "";
+		for (byte b : in) {
+			result += String.format("%02x", b);
+		}
 		return result;
 	}
 
