@@ -20,6 +20,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -35,6 +36,7 @@ public class HttpPost extends AsyncTask<String, Void, HashMap<String, String>> {
 
 	@Override
 	protected HashMap<String, String> doInBackground(String... urls) {
+		Log.d("POW", "url(post): "+urls[0]);
 		// urls come from the execute() call
 		try {
 			return postRequest(urls[0]);
@@ -74,6 +76,7 @@ public class HttpPost extends AsyncTask<String, Void, HashMap<String, String>> {
 			OutputStream os = conn.getOutputStream();
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 			String encodedParams = Util.stream2string(new UrlEncodedFormEntity(postParameters).getContent());
+			Log.d("CONNECTOR_DEBUG", "encodedParams: " + Uri.encode(encodedParams));
 			writer.write(encodedParams);
 			writer.close();
 			os.close();
@@ -86,6 +89,7 @@ public class HttpPost extends AsyncTask<String, Void, HashMap<String, String>> {
 			String website = Util.stream2string(is);
 			System.out.println("Post Result: "+website);
 			result.put("Result", website);
+			result.put("Params", Uri.encode(encodedParams));
 
 			return result;
 		} catch (IOException e) {

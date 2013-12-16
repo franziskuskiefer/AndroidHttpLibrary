@@ -9,12 +9,17 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class HttpGet extends AsyncTask<String, Void, HashMap<String, String>> {
 
+	private static final String REQUEST_METHOD = "GET";
+	private static final int CONNECT_TIMEOUT = 15000;
+	private static final int READ_TIMEOUT = 10000;
+	private static final String HTTPS = "https";
 	private Callback caller;
 
 	public HttpGet(Callback callback) {
@@ -48,19 +53,18 @@ public class HttpGet extends AsyncTask<String, Void, HashMap<String, String>> {
 			HashMap<String, String> result = new HashMap<String, String>();
 			
 			HttpURLConnection conn = (HttpURLConnection) new URL(myurl).openConnection();
-			conn.setReadTimeout(10000);
-			conn.setConnectTimeout(15000);
-			conn.setRequestMethod("GET");
+			conn.setReadTimeout(READ_TIMEOUT);
+			conn.setConnectTimeout(CONNECT_TIMEOUT);
+			conn.setRequestMethod(REQUEST_METHOD);
 			conn.setDoInput(true);
 			// Starts the query
 			conn.connect();
-			if (myurl.toLowerCase(Locale.UK).startsWith("https")) {
+			if (myurl.toLowerCase(Locale.UK).startsWith(HTTPS)) {
 				Certificate[] serverCertificates = ((HttpsURLConnection)conn).getServerCertificates();
-				String fingerprint = Util.getFingerprint(serverCertificates[0]);
+				String fingerprint = Util.getSHA1Fingerprint(serverCertificates[0]);
 				result.put("Fingerprint", fingerprint);
 			}
 			int response = conn.getResponseCode();
-			Log.d("CONNECTOR_DEBUG", "The response is: " + response);
 			is = conn.getInputStream();
 
 			// Convert the InputStream into a string

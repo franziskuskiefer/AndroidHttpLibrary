@@ -24,7 +24,7 @@ public class Util {
 		return result;
 	}
 	
-	public static String getFingerprint(Certificate cert) {
+	public static String getSHA1Fingerprint(Certificate cert) {
 		String result = "";
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
