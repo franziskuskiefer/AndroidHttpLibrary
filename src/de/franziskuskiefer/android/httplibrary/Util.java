@@ -9,6 +9,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
 
 public class Util {
 
@@ -23,7 +30,7 @@ public class Util {
 
 		return result;
 	}
-	
+
 	public static String getSHA1Fingerprint(Certificate cert) {
 		String result = "";
 		try {
@@ -37,13 +44,38 @@ public class Util {
 		return result;
 
 	}
-	
+
 	public static String byteArrayToHexString(byte[] in){
 		String result = "";
 		for (byte b : in) {
 			result += String.format("%02x", b);
 		}
 		return result;
+	}
+
+	public static String listToJsonArray(List<String> in){
+		JSONArray list = new JSONArray();
+		for (String string : in) {
+			list.put(string);
+		}
+		return list.toString();
+	}
+
+	public static JSONObject listToJsonObject(String name, List<String> in){
+		try {
+			JSONObject o = new JSONObject();
+			JSONArray list = new JSONArray();
+			for (String string : in) {
+				list.put(string);
+			}
+			o.put(name, list);
+			return o;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			Log.e("POWDEMO", "JSONEception ("+Thread.currentThread().getStackTrace()[2].getLineNumber()+") - "+e.getLocalizedMessage());
+		}
+
+		return null;
 	}
 
 }
