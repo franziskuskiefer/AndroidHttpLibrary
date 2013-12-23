@@ -1,4 +1,4 @@
-package de.franziskuskiefer.android.httplibrary;
+package de.franziskuskiefer.android.httplibrary.old;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
 
 import android.os.AsyncTask;
-import android.util.Log;
+import de.franziskuskiefer.android.httplibrary.Callback;
+import de.franziskuskiefer.android.httplibrary.Util;
 
 public class HttpGet extends AsyncTask<String, Void, HashMap<String, String>> {
 

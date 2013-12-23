@@ -1,14 +1,12 @@
-package de.franziskuskiefer.android.httplibrary;
+package de.franziskuskiefer.android.httplibrary.old;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +21,8 @@ import org.apache.http.message.BasicNameValuePair;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import de.franziskuskiefer.android.httplibrary.Callback;
+import de.franziskuskiefer.android.httplibrary.Util;
 
 public class HttpPost extends AsyncTask<String, Void, HashMap<String, String>> {
 

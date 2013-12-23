@@ -1,4 +1,4 @@
-package de.franziskuskiefer.android.httplibrary;
+package de.franziskuskiefer.android.httplibrary.sync;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,11 +14,12 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
+import de.franziskuskiefer.android.httplibrary.Util;
 
 public class HTTPS_GET extends HTTPSConnection {
 	
-	public HTTPS_GET(Callback callback, Context ctx, boolean app){
-		super(callback, ctx, app);
+	public HTTPS_GET(Context ctx, boolean app){
+		super(ctx, app);
 		setREQUEST_METHOD(GET);
 	}
 
@@ -35,7 +36,7 @@ public class HTTPS_GET extends HTTPSConnection {
 
 			// Convert the InputStream into a string
 			String website = Util.stream2string(is);
-//			Log.d("POWDEMO", "json result: "+website);
+//			Log.d("HTTPSConnection", "json result: "+website);
 			result.put("body", website);
 			JSONObject headers = new JSONObject();
 			for (String key : headerFields.keySet()) {
@@ -44,14 +45,10 @@ public class HTTPS_GET extends HTTPSConnection {
 						headers.put(key, Util.listToJsonArray(headerFields.get(key)));
 				} catch (JSONException e) {
 					e.printStackTrace();
-					Log.e("POWDEMO", "JSONEception ("+Thread.currentThread().getStackTrace()[2].getLineNumber()+") - "+e.getLocalizedMessage());
+					Log.e("HTTPSConnection", "JSONEception ("+Thread.currentThread().getStackTrace()[2].getLineNumber()+") - "+e.getLocalizedMessage());
 				}
 			}
 			result.put("headers", headers.toString());
-			
-			Certificate[] serverCertificates = conn.getServerCertificates();
-			String fingerprint = Util.getSHA1Fingerprint(serverCertificates[0]);
-			result.put("fingerprint", fingerprint);
 			
 			return result;
 		} finally {

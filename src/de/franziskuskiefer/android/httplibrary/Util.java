@@ -72,7 +72,7 @@ public class Util {
 			return o;
 		} catch (JSONException e) {
 			e.printStackTrace();
-			Log.e("POWDEMO", "JSONEception ("+Thread.currentThread().getStackTrace()[2].getLineNumber()+") - "+e.getLocalizedMessage());
+			Log.e("HTTPSConnection", "JSONEception ("+Thread.currentThread().getStackTrace()[2].getLineNumber()+") - "+e.getLocalizedMessage());
 		}
 
 		return null;

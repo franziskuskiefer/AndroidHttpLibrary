@@ -1,4 +1,4 @@
-package de.franziskuskiefer.android.httplibrary;
+package de.franziskuskiefer.android.httplibrary.sync;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -23,21 +23,22 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import de.franziskuskiefer.android.httplibrary.Util;
 
 public class HTTPS_POST extends HTTPSConnection {
 
-	public HTTPS_POST(Callback callback, Context ctx, boolean app){
-		super(callback, ctx, app);
+	public HTTPS_POST(Context ctx, boolean app){
+		super(ctx, app);
 		setMethod();
 	}
 	
-	public HTTPS_POST(Callback callback, Context ctx, boolean app, String textParams){
-		super(callback, ctx, app, textParams);
+	public HTTPS_POST(Context ctx, boolean app, String textParams){
+		super(ctx, app, textParams);
 		setMethod();
 	}
 	
-	public HTTPS_POST(Callback callback, Context ctx, boolean app, HashMap<String, String> params){
-		super(callback, ctx, app, params);
+	public HTTPS_POST(Context ctx, boolean app, HashMap<String, String> params){
+		super(ctx, app, params);
 		setMethod();
 	}
 	
@@ -88,7 +89,7 @@ public class HTTPS_POST extends HTTPSConnection {
 					headers.put(key, Util.listToJsonArray(headerFields.get(key)));
 			} catch (JSONException e) {
 				e.printStackTrace();
-				Log.e("POWDEMO", "JSONEception ("+Thread.currentThread().getStackTrace()[2].getLineNumber()+") - "+e.getLocalizedMessage());
+				Log.e("HTTPSConnection", "JSONEception ("+Thread.currentThread().getStackTrace()[2].getLineNumber()+") - "+e.getLocalizedMessage());
 			}
 		}
 		result.put("headers", headers.toString());

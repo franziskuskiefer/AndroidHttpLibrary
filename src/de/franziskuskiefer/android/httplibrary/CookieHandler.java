@@ -16,11 +16,11 @@ public class CookieHandler {
 	public CookieHandler(Context ctx){
 		preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
 		cookie = preferences.getString("cookie", "");
-		Log.d("POWDEMO", "cookie(constructor): "+cookie);
+//		Log.d("HTTPSConnection", "cookie(constructor): "+cookie);
 	}
 	
 	public void setCookie(String headers){
-		Log.d("POWDEMO", "cookie(pre-setCookie): "+cookie);
+//		Log.d("HTTPSConnection", "cookie(pre-setCookie): "+cookie);
 		try {
 			JSONObject header = new JSONObject(headers);
 			String cookieHeaderName = getCookieName(header);
@@ -29,13 +29,13 @@ public class CookieHandler {
 				String cookieName = "userhandler=";
 				this.cookie = cookieName+cookies.substring(cookies.indexOf(cookieName)+cookieName.length(), cookies.indexOf(";"));
 				storeCookie();
-				Log.d("POWDEMO", "cookie(post-setCookie): "+cookie);
+//				Log.d("HTTPSConnection", "cookie(post-setCookie): "+cookie);
 			} else {
-				Log.d("POWDEMO", "no cookie set");
+				Log.d("HTTPSConnection", "no cookie set");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			Log.e("POWDEMO", "ERROR:"+e.getLocalizedMessage());
+			Log.e("HTTPSConnection", "ERROR:"+e.getLocalizedMessage());
 		}
 	}
 	
@@ -44,7 +44,7 @@ public class CookieHandler {
 	}
 	
 	public String getCookie() {
-		Log.d("POWDEMO", "cookie(getCookie): "+cookie);
+//		Log.d("HTTPSConnection", "cookie(getCookie): "+cookie);
 		return cookie;
 	}
 
