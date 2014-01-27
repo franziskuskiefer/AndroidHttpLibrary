@@ -22,7 +22,8 @@ public class MyHostnameVerifier implements HostnameVerifier {
 	
 	@Override
 	public boolean verify(String arg0, SSLSession arg1) {
-//		Log.d("HTTPSConnection", "SSL Session ID: "+Base64.encodeToString(arg1.getId(), Base64.DEFAULT));
+		Log.d("HTTPSConnection", "SSL Old Session ID: "+getTlsId());
+		Log.d("HTTPSConnection", "SSL Session ID: "+Base64.encodeToString(arg1.getId(), Base64.DEFAULT));
 		
 		String tlsId = getTlsId();
 		boolean correctHostname = true;
