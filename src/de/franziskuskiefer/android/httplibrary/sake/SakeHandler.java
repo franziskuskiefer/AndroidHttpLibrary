@@ -12,14 +12,13 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import de.franziskuskiefer.android.httplibrary.sake.Sake.SakeResult;
 import de.franziskuskiefer.android.httplibrary.async.HTTPSConnection;
 import de.franziskuskiefer.android.httplibrary.sync.HTTPS_GET;
 import de.franziskuskiefer.android.httplibrary.sync.HTTPS_POST;
 
 public class SakeHandler extends Thread implements Constants {
 
-	private Sake sake;
+//	private Sake sake;
 	private String trans;
 	private SharedPreferences preferences;
 	private String sessionID;
@@ -43,25 +42,25 @@ public class SakeHandler extends Thread implements Constants {
 		Log.d("HTTPSConnection", "successURL: "+successURL);
 		
 		if (secret != ""){
-			String m1 = setupSoke();
-			HashMap<String, String> serverM = sendSokeM1(m1, ctx);
-			HashMap<String, String> finalMessage = finishSoke(serverM, secret, ctx, successURL);
-			if (finalMessage != null){
-				String body = finalMessage.get("body");
-				if (body != null && sake.verifyServer(body.substring(body.indexOf(";")+1))){
-					return true;
-				}
-			}
+//			String m1 = setupSoke();
+//			HashMap<String, String> serverM = sendSokeM1(m1, ctx);
+//			HashMap<String, String> finalMessage = finishSoke(serverM, secret, ctx, successURL);
+//			if (finalMessage != null){
+//				String body = finalMessage.get("body");
+//				if (body != null && sake.verifyServer(body.substring(body.indexOf(";")+1))){
+//					return true;
+//				}
+//			}
 		}
 		
 		return false;
 	}
 
 	// initialise new soke protocol and send first message to server
-	private String setupSoke() {
-		this.sake = new Sake();
-		return sake.init();
-	}
+//	private String setupSoke() {
+//		this.sake = new Sake();
+//		return sake.init();
+//	}
 
 	// we started soke and this is the first server message -> create auth tokens and final message
 	private HashMap<String, String> finishSoke(HashMap<String, String> s, String secret, Context ctx, String successURL) {
@@ -77,28 +76,28 @@ public class SakeHandler extends Thread implements Constants {
 			// add result to transcript
 			this.trans += "&POWServerExchange=" + Uri.encode(jsonString);
 
-			try {
-				JSONObject json = new JSONObject(jsonString);
-				SakeResult sokeResult = sake.next(json.getString("serverPoint"), secret, trans, cert);
-				String auth = sokeResult.getA1();
-				storeKey(sokeResult.getKey());
+//			try {
+//				JSONObject json = new JSONObject(jsonString);
+//				SakeResult sokeResult = sake.next(json.getString("serverPoint"), secret, trans, cert);
+//				String auth = sokeResult.getA1();
+//				storeKey(sokeResult.getKey());
 
-				Log.d("HTTPSConnection", "auth1: "+auth);
-
-				// get session cookie with auth
-				String finalURL = successURL+"?auth1="+auth+"&sessionID="+this.sessionID;
-				Log.d("HTTPSConnection", "finalURL: "+finalURL);
-				return new HTTPS_GET(ctx, true).execute(finalURL);
-			} catch (JSONException e) {
-				e.printStackTrace();
-				Log.d("HTTPSConnection", e.getLocalizedMessage());
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-				Log.d("HTTPSConnection", e.getLocalizedMessage());
-			} catch (IOException e) {
-				e.printStackTrace();
-				Log.d("HTTPSConnection", e.getLocalizedMessage());
-			}
+//				Log.d("HTTPSConnection", "auth1: "+auth);
+//
+//				// get session cookie with auth
+//				String finalURL = successURL+"?auth1="+auth+"&sessionID="+this.sessionID;
+//				Log.d("HTTPSConnection", "finalURL: "+finalURL);
+//				return new HTTPS_GET(ctx, true).execute(finalURL);
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//				Log.d("HTTPSConnection", e.getLocalizedMessage());
+//			} catch (MalformedURLException e) {
+//				e.printStackTrace();
+//				Log.d("HTTPSConnection", e.getLocalizedMessage());
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				Log.d("HTTPSConnection", e.getLocalizedMessage());
+//			}
 		} else {
 			Log.d("HTTPSConnection", "Error: Final SOKE message is empty!");
 		}

@@ -12,7 +12,7 @@ public class MyStrcitHostnameVerifier implements HostnameVerifier {
 	@Override
 	public boolean verify(String arg0, SSLSession arg1) {
 		boolean correctHostname = verifier.verify(arg0, arg1);
-		return true;
+		return correctHostname;
 	}
 	
 }

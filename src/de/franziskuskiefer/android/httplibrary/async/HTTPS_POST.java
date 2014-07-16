@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -102,6 +103,10 @@ public class HTTPS_POST extends HTTPSConnection {
 		String website = Util.stream2string(is);
 		result.put("Result", website);
 		result.put("Params", Uri.encode(encodedParams));
+		
+		Certificate[] serverCertificates = conn.getServerCertificates();
+		String fingerprint = Util.getSHA1Fingerprint(serverCertificates[0]);
+		result.put("fingerprint", fingerprint);
 
 		return result;
 	}

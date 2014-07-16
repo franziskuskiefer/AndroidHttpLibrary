@@ -31,7 +31,7 @@ public abstract class HTTPSConnection extends AsyncTask<String, Void, HashMap<St
 	private Callback caller;
 	private boolean mobileApp = false;
 
-	private final CookieHandler cookieHandler;
+//	private final CookieHandler cookieHandler;
 
 	protected String textParameters = null;
 	protected HashMap<String, String> parameters = null;
@@ -48,7 +48,7 @@ public abstract class HTTPSConnection extends AsyncTask<String, Void, HashMap<St
 		this.mobileApp = app;
 		this.ctx = ctx;
 		
-		cookieHandler = new CookieHandler(ctx);
+//		cookieHandler = new CookieHandler(ctx);
 		verifier = new MyHostnameVerifier(ctx);
 	}
 
@@ -85,10 +85,11 @@ public abstract class HTTPSConnection extends AsyncTask<String, Void, HashMap<St
 	protected void onPostExecute(HashMap<String, String> result) {
 		
 		/* failure in TLS -> try to authenticate the server using sake */
-		if (result.containsKey("Exception")){
-			Log.d("HTTPSConnection", "start sake in onPostExecute ...");
-			result = authenticateTLS(result);
-		}
+		// FIXME: what to do with this? For now I remove it
+//		if (result.containsKey("Exception")){
+//			Log.d("HTTPSConnection", "start sake in onPostExecute ...");
+//			result = authenticateTLS(result);
+//		}
 		for (String s : result.keySet()) {
 			Log.d("HTTPSConnection", "Result ("+s+") "+result.get(s));
 		}
@@ -143,15 +144,15 @@ public abstract class HTTPSConnection extends AsyncTask<String, Void, HashMap<St
 			conn.addRequestProperty("MobilePoWApp", this.mobileApp ? "1" : "0");
 
 			// add auth cookie if available
-			if (cookieHandler.getCookie() != null && cookieHandler.getCookie() != "")
-				conn.addRequestProperty("Cookie", cookieHandler.getCookie());
+//			if (cookieHandler.getCookie() != null && cookieHandler.getCookie() != "")
+//				conn.addRequestProperty("Cookie", cookieHandler.getCookie());
 
 			// add hostname verifier
 			conn.setHostnameVerifier(verifier);
 
 			HashMap<String, String> result = doRequest(conn);
 //			Log.d("HTTPSConnection", "header: "+result.get("headers"));
-			cookieHandler.setCookie(result.get("headers"));
+//			cookieHandler.setCookie(result.get("headers"));
 			return result;
 		}
 

@@ -27,7 +27,7 @@ public abstract class HTTPSConnection {
 	private String REQUEST_METHOD;
 	private boolean mobileApp = false;
 
-	private final CookieHandler cookieHandler;
+//	private final CookieHandler cookieHandler;
 
 	protected String textParameters = null;
 	protected HashMap<String, String> parameters = null;
@@ -38,7 +38,7 @@ public abstract class HTTPSConnection {
 	protected HTTPSConnection(Context ctx, boolean app){
 		this.mobileApp = app;
 		
-		cookieHandler = new CookieHandler(ctx);
+//		cookieHandler = new CookieHandler(ctx);
 		verifier = new MyStrcitHostnameVerifier();
 	}
 
@@ -70,8 +70,8 @@ public abstract class HTTPSConnection {
 			conn.addRequestProperty("MobilePoWApp", this.mobileApp ? "1" : "0");
 
 			// add auth cookie if available
-			if (cookieHandler.getCookie() != null && cookieHandler.getCookie() != "")
-				conn.addRequestProperty("Cookie", cookieHandler.getCookie());
+//			if (cookieHandler.getCookie() != null && cookieHandler.getCookie() != "")
+//				conn.addRequestProperty("Cookie", cookieHandler.getCookie());
 
 			// add hostname verifier
 			conn.setHostnameVerifier(verifier);
@@ -82,7 +82,7 @@ public abstract class HTTPSConnection {
 			result.put("fingerprint", fingerprint);
 			
 			Log.d("HTTPSConnection", "header: "+result.get("headers"));
-			cookieHandler.setCookie(result.get("headers"));
+//			cookieHandler.setCookie(result.get("headers"));
 			return result;
 		}
 
