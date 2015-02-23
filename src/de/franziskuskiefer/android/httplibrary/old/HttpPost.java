@@ -36,7 +36,7 @@ public class HttpPost extends AsyncTask<String, Void, HashMap<String, String>> {
 
 	@Override
 	protected HashMap<String, String> doInBackground(String... urls) {
-		Log.d("POW", "url(post): "+urls[0]);
+		Log.i("POW", "url(post): "+urls[0]);
 		// urls come from the execute() call
 		try {
 			return postRequest(urls[0]);
@@ -76,13 +76,15 @@ public class HttpPost extends AsyncTask<String, Void, HashMap<String, String>> {
 			OutputStream os = conn.getOutputStream();
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 			String encodedParams = Util.stream2string(new UrlEncodedFormEntity(postParameters).getContent());
-			Log.d("CONNECTOR_DEBUG", "encodedParams: " + Uri.encode(encodedParams));
+			if (Util.DEV)
+				Log.d("CONNECTOR_DEBUG", "encodedParams: " + Uri.encode(encodedParams));
 			writer.write(encodedParams);
 			writer.close();
 			os.close();
 			
 			int response = conn.getResponseCode();
-			Log.d("CONNECTOR_DEBUG", "The response is: " + response);
+			if (Util.DEV)
+				Log.d("CONNECTOR_DEBUG", "The response is: " + response);
 			InputStream is = conn.getInputStream();
 
 			// Convert the InputStream into a string

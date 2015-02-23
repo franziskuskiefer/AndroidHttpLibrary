@@ -36,7 +36,6 @@ public class HTTPS_GET extends HTTPSConnection {
 
 			// Convert the InputStream into a string
 			String website = Util.stream2string(is);
-//			Log.d("HTTPSConnection", "json result: "+website);
 			result.put("body", website);
 			JSONObject headers = new JSONObject();
 			for (String key : headerFields.keySet()) {

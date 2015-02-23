@@ -9,14 +9,13 @@ import java.util.Locale;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 
-import de.franziskuskiefer.android.httplibrary.Callback;
-import de.franziskuskiefer.android.httplibrary.CookieHandler;
-import de.franziskuskiefer.android.httplibrary.sake.SakeHandler;
-import de.franziskuskiefer.android.httplibrary.sync.HTTPS_GET;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import de.franziskuskiefer.android.httplibrary.Callback;
+import de.franziskuskiefer.android.httplibrary.Util;
+import de.franziskuskiefer.android.httplibrary.sake.SakeHandler;
+import de.franziskuskiefer.android.httplibrary.sync.HTTPS_GET;
 
 public abstract class HTTPSConnection extends AsyncTask<String, Void, HashMap<String, String>> {
 
@@ -90,8 +89,10 @@ public abstract class HTTPSConnection extends AsyncTask<String, Void, HashMap<St
 //			Log.d("HTTPSConnection", "start sake in onPostExecute ...");
 //			result = authenticateTLS(result);
 //		}
-		for (String s : result.keySet()) {
-			Log.d("HTTPSConnection", "Result ("+s+") "+result.get(s));
+		if (Util.DEV){
+			for (String s : result.keySet()) {
+				Log.d("HTTPSConnection", "Result ("+s+") "+result.get(s));
+			}
 		}
 		this.caller.finished(result);
 	}
@@ -108,7 +109,7 @@ public abstract class HTTPSConnection extends AsyncTask<String, Void, HashMap<St
 		} finally {
 			if (this.tlsAuth){
 				// could authenticate TLS session -> redo last query
-				Log.d("HTTPSConnection", "Successfully authenticated TLS session :)");
+				Log.i("HTTPSConnection", "Successfully authenticated TLS session :)");
 				try {
 					// XXX: this should only happen if this request is GET
 					GetThread thread = new GetThread();
@@ -120,7 +121,7 @@ public abstract class HTTPSConnection extends AsyncTask<String, Void, HashMap<St
 					Log.e("HTTPSConnection", "Error: "+e.getLocalizedMessage());
 				}
 			} else {
-				Log.d("HTTPSConnection", "Error on TLS authentication :(");
+				Log.i("HTTPSConnection", "Error on TLS authentication :(");
 			}
 		}
 		
@@ -151,7 +152,6 @@ public abstract class HTTPSConnection extends AsyncTask<String, Void, HashMap<St
 			conn.setHostnameVerifier(verifier);
 
 			HashMap<String, String> result = doRequest(conn);
-//			Log.d("HTTPSConnection", "header: "+result.get("headers"));
 //			cookieHandler.setCookie(result.get("headers"));
 			return result;
 		}

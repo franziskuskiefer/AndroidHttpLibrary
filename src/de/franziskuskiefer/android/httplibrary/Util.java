@@ -19,6 +19,8 @@ import android.util.Log;
 
 public class Util {
 
+	public static final Boolean DEV = false;
+	
 	// Reads an InputStream and converts it to a String.
 	public static String stream2string(InputStream stream) throws IOException, UnsupportedEncodingException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));    

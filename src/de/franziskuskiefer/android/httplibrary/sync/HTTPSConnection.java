@@ -58,7 +58,7 @@ public abstract class HTTPSConnection {
 	public HashMap<String, String> execute(String url) throws MalformedURLException, IOException {
 		// we only handle HTTPS connections here !!!
 		if (url.toLowerCase(Locale.UK).startsWith(HTTPS)) {
-			Log.d("HTTPSConnection", "url: "+url);
+			Log.i("HTTPSConnection", "url: "+url);
 
 			HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
 			conn.setReadTimeout(READ_TIMEOUT);
@@ -81,7 +81,8 @@ public abstract class HTTPSConnection {
 			String fingerprint = Util.getSHA1Fingerprint(serverCertificates[0]);
 			result.put("fingerprint", fingerprint);
 			
-			Log.d("HTTPSConnection", "header: "+result.get("headers"));
+			if (Util.DEV)
+				Log.d("HTTPSConnection", "header: "+result.get("headers"));
 //			cookieHandler.setCookie(result.get("headers"));
 			return result;
 		}

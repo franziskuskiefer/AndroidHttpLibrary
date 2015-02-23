@@ -4,16 +4,13 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import de.franziskuskiefer.android.httplibrary.Util;
 import de.franziskuskiefer.android.httplibrary.async.HTTPSConnection;
-import de.franziskuskiefer.android.httplibrary.sync.HTTPS_GET;
 import de.franziskuskiefer.android.httplibrary.sync.HTTPS_POST;
 
 public class SakeHandler extends Thread implements Constants {
@@ -38,8 +35,10 @@ public class SakeHandler extends Thread implements Constants {
 		this.username = preferences.getString(PREF_USER_NAME, "");
 		String secret = preferences.getString(PREF_AUTH_KEY, "");
 		String successURL = preferences.getString(PREF_SUCCESS_URL, "");
-		Log.d("HTTPSConnection", "secret: "+secret);
-		Log.d("HTTPSConnection", "successURL: "+successURL);
+		if (Util.DEV) {
+			Log.d("HTTPSConnection", "secret: "+secret);
+			Log.d("HTTPSConnection", "successURL: "+successURL);
+		}
 		
 		if (secret != ""){
 //			String m1 = setupSoke();
@@ -99,7 +98,7 @@ public class SakeHandler extends Thread implements Constants {
 //				Log.d("HTTPSConnection", e.getLocalizedMessage());
 //			}
 		} else {
-			Log.d("HTTPSConnection", "Error: Final SOKE message is empty!");
+			Log.i("HTTPSConnection", "Error: Final SOKE message is empty!");
 		}
 		
 		return null;
@@ -114,7 +113,7 @@ public class SakeHandler extends Thread implements Constants {
 		params.put("clientMsg", m1);
 
 		String authURL = preferences.getString(PREF_SAKE_URL, "");
-		Log.d("HTTPSConnection", "do request to authURL "+authURL);
+		Log.i("HTTPSConnection", "do request to authURL "+authURL);
 		
 		try {
 			return new HTTPS_POST(ctx, true, params).execute(authURL);

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
 import android.util.Log;
+import de.franziskuskiefer.android.httplibrary.Util;
 
 public class MyHostnameVerifier implements HostnameVerifier {
 
@@ -38,7 +39,8 @@ public class MyHostnameVerifier implements HostnameVerifier {
 //			setTlsId(arg1.getId());
 //		}
 
-		Log.d("HTTPSConnection", "Hostname verification: "+verifier.verify(arg0, arg1));
+		if (Util.DEV)
+			Log.d("HTTPSConnection", "Hostname verification: "+verifier.verify(arg0, arg1));
 		return verifier.verify(arg0, arg1);
 
 //		Log.d("HTTPSConnection", "SSL Old Session ID: "+Base64.encodeToString(arg1.getId(), Base64.DEFAULT));

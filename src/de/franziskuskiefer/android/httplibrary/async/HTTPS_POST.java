@@ -75,14 +75,16 @@ public class HTTPS_POST extends HTTPSConnection {
 
 		OutputStream os = conn.getOutputStream();
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-		Log.d("CONNECTOR_DEBUG", "encodedParams: " + Uri.encode(encodedParams));
+		if (Util.DEV)
+			Log.d("CONNECTOR_DEBUG", "encodedParams: " + Uri.encode(encodedParams));
 		writer.write(encodedParams);
 		writer.close();
 		os.close();
 		
 		/* response */
 		int response = conn.getResponseCode();
-		Log.d("CONNECTOR_DEBUG", "The response is: " + response);
+		if (Util.DEV)
+			Log.d("CONNECTOR_DEBUG", "The response is: " + response);
 		
 		Map<String, List<String>> headerFields = conn.getHeaderFields();
 		JSONObject headers = new JSONObject();
